@@ -1,0 +1,78 @@
+Write a program for Bellman Ford Routing Algorithm
+
+The Bellman-Ford algorithm is best suited to find the shortest paths in a directed graph, with
+one or more negative edge weights, from the source vertex to all other vertices.
+It does so by repeatedly checking all the edges in the graph for shorter paths, as many times as
+there are vertices in the graph (minus 1).
+The Bellman-Ford algorithm can also be used for graphs with positive edges (both directed and
+undirected), like we can with Dijkstra's algorithm, but Dijkstra's algorithm is preferred in such cases
+because it is faster.
+Using the Bellman-Ford algorithm on a graph with negative cycles will not produce a result of
+shortest paths because in a negative cycle we can always go one more round and get a shorter
+path.
+A negative cycle is a path we can follow in circles, where the sum of the edge weights is negative.
+Luckily, the Bellman-Ford algorithm can be implemented to safely detect and report the presence of
+negative cycles.
+How it works:
+1. Set initial distance to zero for the source vertex, and set initial distances to infinity for all other
+vertices.
+2. For each edge, check if a shorter distance can be calculated, and update the distance if the
+calculated distance is shorter.
+3. Check all edges (step 2) V−1�−1 times. This is as many times as there are vertices (V�), minus
+one.
+4. Optional: Check for negative cycles. This will be explained in better detail later
+
+Program:-
+import java.util.*;
+class Edge {
+int u, v, w;
+Edge(int a, int b, int c) {
+u = a;
+v = b;
+w = c;
+}
+}
+public class BellmanFord {
+static final int INF = Integer.MAX_VALUE;
+static void runBellmanFord(int n, List<Edge> E, int src) {
+int[] d = new int[n];
+Arrays.fill(d, INF);
+d[src] = 0;
+for (int i = 0; i < n - 1; i++) {
+for (Edge e : E) {
+if (d[e.u] != INF && d[e.u] + e.w < d[e.v]) {
+d[e.v] = d[e.u] + e.w;
+}
+}
+}
+for (Edge e : E) {
+if (d[e.u] != INF && d[e.u] + e.w < d[e.v]) {
+System.out.println("Negative weight cycle found");
+return;
+}
+}
+System.out.println("Node\tDist");
+for (int i = 0; i < n; i++) {
+System.out.println(i + "\t" + (d[i] == INF ? "INF" : d[i]));
+}
+}
+public static void main(String args[]) {
+Scanner sc =new Scanner(System.in);
+System.out.print("Enter number of vertices:");
+int n=sc.nextInt();
+System.out.print("Enter number of edges:");
+int m=sc.nextInt();
+List<Edge> E = new ArrayList<>();
+System.out.print("Enter edges:(u,v,w)");
+for(int i=0;i<m;i++)
+{
+int u=sc.nextInt();
+int v=sc.nextInt();
+int w=sc.nextInt();
+E.add(new Edge(u,v,w));
+}
+System.out.print("Enter source vertex:");
+int src=sc.nextInt();
+runBellmanFord(n, E, 0);
+}
+}
