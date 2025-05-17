@@ -1,0 +1,67 @@
+Write two programs in java: (i) hello_client and (ii) hello_server
+
+1) Hello Server Program
+
+import java.io.*;
+import java.net.*;
+class Hserver
+{
+ public static void main (String args[])
+ {
+ int port=8080;
+ try(ServerSocket serverSocket=new ServerSocket(port))
+ {
+ System.out.println("Server is listening on port"+port);
+ while(true)
+ {
+ Socket socket=serverSocket.accept();
+ System.out.println("Client connected");
+ InputStream input=socket.getInputStream();
+ BufferedReader reader=new BufferedReader(new
+InputStreamReader(input));
+ String message=reader.readLine();
+ System.out.println("Receicved from client:"+message);
+ OutputStream output=socket.getOutputStream();
+ PrintWriter writer=new PrintWriter(output,true);
+ writer.println("Hello,client 1");
+writer.println("Hello,client 2");
+ socket.close();
+ System.out.println("Connection closed");
+ }
+ }
+ catch(IOException ex)
+ {
+ System.out.println("Srever error:"+ex.getMessage());
+ ex.printStackTrace();
+
+ }
+ }}
+
+ 2) Hello client Program
+import java.io.*;
+import java.net.*;
+class Hclient
+{
+ public static void main(String args[])
+ {
+ String hostname="127.0.0.1";
+ int port=8080;
+ try(Socket socket=new Socket(hostname,port))
+ {
+ OutputStream output=socket.getOutputStream();
+ PrintWriter writer=new PrintWriter(output,true);
+ writer.println("Hello,Server");
+ InputStream input=socket.getInputStream();
+ BufferedReader reader=new BufferedReader (new InputStreamReader(input));
+ String message=reader.readLine();
+ System.out.println("Received from server"+message);
+ }
+ catch(UnknownHostException ex)
+ {
+ System.out.println("Server not found :"+ex.getMessage());
+ }catch(IOException ex)
+ {
+ System.out.println("i/o error"+ex.getMessage());
+ }
+ }
+ }
