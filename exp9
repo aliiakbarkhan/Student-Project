@@ -1,0 +1,104 @@
+Write an Echo_Client and Echo_server using TCP to estimate round trip time from client to the server with multiplexed I/O operation.
+
+Multiplexed I/O in Java socket programming allows a single thread to manage
+multiple socket connections concurrently. This is achieved through mechanisms
+like select, poll, and epoll (though epoll is not directly available in standard Java, its
+functionality is similar to what Selector provides). The core idea is to monitor
+multiple file descriptors (sockets in this case) for readiness (readable, writable, or
+exception) and then perform I/O operations only on those that are ready.
+Java's NIO (New I/O) package provides the necessary tools for multiplexed I/O:
+ Selector: An object that monitors multiple SelectableChannel objects for events.
+ SelectableChannel: An abstract class for channels that can be multiplexed, such
+as SocketChannel and ServerSocketChannel.
+ SelectionKey: Represents the registration of a channel with a selector. It contains
+information about the channel's readiness for different operations.
+
+>TCP Server RTT
+
+import java.io.IOException;
+import java.net.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.*;
+import java.util.Iterator;
+class ServerMultiplexed
+{
+public static void main (String args[])throws IOException
+{
+Selector selector=Selector.open();
+ServerSocketChannel serchannel=ServerSocketChannel.open();
+serchannel.bind(new InetSocketAddress(5000));
+serchannel.configureBlocking(false);
+serchannel.register(selector,SelectionKey.OP_ACCEPT);
+System.out.println("Srerver started on port 5000...");
+while(true)
+{
+ selector.select();
+ Iterator<SelectionKey>keys=selector.selectedKeys().iterator();
+ while(keys.hasNext())
+ {
+ SelectionKey Key=keys.next();
+ keys.remove();
+if(Key.isAcceptable())
+{
+ServerSocketChannel srv=(ServerSocketChannel)Key.channel();
+SocketChannel client=srv.accept();
+client.configureBlocking(false);
+client.register(selector,SelectionKey.OP_READ);
+System.out.println("New client connected
+:"+client.getRemoteAddress());
+}
+if(Key.isReadable())
+{
+SocketChannel client=(SocketChannel)Key.channel();
+ByteBuffer buffer=ByteBuffer.allocate(1024);
+int bytesread=client.read(buffer);
+if(bytesread==-1)
+{
+System.out.println("Client
+disconnected:"+client.getRemoteAddress());
+client.close();
+Key.cancel();
+continue;
+}
+buffer.flip();
+String message=new String(buffer.array(),0,buffer.limit());
+System.out.println("Received :"+message);
+buffer.rewind();
+client.write(buffer);
+}
+ }
+}
+}
+}
+
+>TCP Client RTT 
+
+import java.io.*;
+import java.net.Socket;
+public class TCPClientRTT {
+ public static void main(String[] args) {
+ try (Socket socket = new Socket("localhost", 5000);
+ BufferedReader userInput = new BufferedReader(new
+InputStreamReader(System.in));
+ BufferedReader serverInput = new BufferedReader(new
+InputStreamReader(socket.getInputStream()));
+ OutputStream output = socket.getOutputStream()) {
+ System.out.println("Connected to server. Type messages:");
+ String message;
+ while (!(message = userInput.readLine()).equalsIgnoreCase("exit")) {
+ long startTime = System.nanoTime();
+ output.write(message.getBytes());
+ output.flush();
+ char[] buffer = new char[1024];
+ int charsRead = serverInput.read(buffer);
+ String response = new String(buffer, 0, charsRead);
+ long endTime = System.nanoTime();
+ double rtt = (endTime - startTime) / 1_000_000.0;
+ System.out.println("Server replied: " + response.trim());
+ System.out.printf("RTT: %.2f ms%n", rtt);
+ }
+ } catch (Exception e) {
+ e.printStackTrace();
+ }
+ }
+}
