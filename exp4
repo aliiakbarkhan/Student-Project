@@ -1,3 +1,5 @@
+Write a program to implement various types of error correction techniques.
+
 A) Hamming code
 import java.util.Scanner;
 public class Hammingc
