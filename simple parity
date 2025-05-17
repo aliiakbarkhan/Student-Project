@@ -1,0 +1,63 @@
+import java.util.Scanner;
+class SimpleParity {
+public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Enter the number of data bits: ");
+    int n = sc.nextInt();
+    int[] data = new int[n];
+    System.out.println("Enter the data bits(0 & 1 only): ");
+    int countOnes = 0;
+    for(int i = 0; i < n; i++) {
+        data[i] = sc.nextInt();
+        if(data[i]==1) {
+            countOnes++;
+        }
+    }
+    System.out.println("Enter the type of parity(1 for Even, 2 for Odd): ");
+    int choice = sc.nextInt();
+    boolean evenParity = (choice == 1);
+    int parityBit;
+    if(evenParity) {
+        if(countOnes % 2 == 0) {
+            parityBit = 0;
+    } else {
+        parityBit = 1;
+    }
+    } else {
+        if(countOnes % 2 == 0) {
+            parityBit = 1;
+        } else {
+            parityBit = 0;
+        }
+    }
+    System.out.println("Parity bit: " + parityBit);
+    System.out.println("Transmitted Data: ");
+    for(int bit:data) {
+        System.out.print(bit + " ");
+    }
+    System.out.println(parityBit);
+    System.out.println("Enter received data bits (including parity bit): ");
+    countOnes = 0;
+    int[] receivedData = new int[n+1];
+    for(int i = 0; i < n+1; i++) {
+        receivedData[i] = sc.nextInt();
+        if(receivedData[i]==1) {
+            countOnes++;
+        }
+    }
+    boolean isParityCorrect;
+    if(evenParity) {
+        isParityCorrect = (countOnes % 2 == 0);
+    } else {
+        isParityCorrect = (countOnes % 2 != 0);
+    }
+    
+    if(isParityCorrect) {
+        System.out.println("Data received is correct.");
+    } else {
+        System.out.println("Data received is incorrect.");
+    }
+    sc.close();
+}
+    
+}
