@@ -1,0 +1,82 @@
+Write two programs in Java: (i) hello_client and (ii) hello_server. The server read UDP datagram; it reads all the data and prints it to the screen.
+
+UDP Server-Client implementation in java
+In UDP, the client does not form a connection with the server like in TCP and instead just sends a
+datagram. Similarly, the server need not accept a connection and just waits for datagrams t
+ arrive. Datagrams upon arrival contain the address of sender which the server uses to send data to the correct client
+1. UDP Echo Client
+
+ In the UDP Echo client a socket is created.
+ Then we bind the socket.
+ After the binding issuccesful , we send messages input from the user and display
+the data received from the server using sendto() and recvfrom() functions.
+UDP Echo Server
+ In the UDP Echo server , we create a socket and bind to a advertized port number.
+ Then an infinite loop isstarted to processthe client requestsfor connections.
+ The process receives data from the client using recvfrom () function and echoes
+the same data using the sendto() function.
+ Please note that thisserver is capable of handles multiple clients automatically as
+UDP is a datagram based protocol hence no exclusive connection is required to a
+client in this case.
+
+2 UDP Date Client
+
+ In the UDP Date client a socket is created.
+ Then we bind the socket.
+ After the binding is succesful , we send an arbitrary datagram to port 13 on the
+server machine and then display the datagram received which issupposed to be the
+data/time on the server.
+
+>Hello Server
+
+ import java.net.*;
+class Hserverudp
+{
+public static void main(String args[])
+{
+ int port=9876;
+ try(DatagramSocket ss=new DatagramSocket(port))
+ {
+ System.out.println("Server is listening for messages");
+byte[] receiveBuffer=new byte[1024];
+while (true)
+ {
+ DatagramPacket receivePacket=new DatagramPacket(receiveBuffer,receiveBuffer.length);
+ ss.receive(receivePacket);
+ String message=new String (receivePacket.getData(),0,receivePacket.getLength());
+ System.out.println("Received
+from"+receivePacket.getAddress()+":"+receivePacket.getPort()+"=>"+message);
+ }
+ }
+ catch(Exception e)
+ {
+ e.printStackTrace();
+ }
+ }
+}
+
+>Hello Client
+
+import java.net.*;
+class Hclientudp
+{
+public static void main(String args[])
+{
+ final String Seraddress="localhost";
+ final int Serport=9876;
+ try (DatagramSocket client=new DatagramSocket())
+ {
+ String message="Hello, Server from client 1";
+byte[] senddata=message.getBytes();
+InetAddress serveraddress=InetAddress.getByName(Seraddress);
+DatagramPacket sendPacket=new
+DatagramPacket(senddata,senddata.length,serveraddress,Serport);
+client.send(sendPacket);
+System.out.println("Message sent to server.");
+}
+catch(Exception e)
+{
+ e.printStackTrace();
+ }
+}
+}
