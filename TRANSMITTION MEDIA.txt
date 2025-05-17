@@ -1,0 +1,97 @@
+1. Twisted Pair Cables
+
+Used in telephone lines and local area networks (LANs).
+
+Suitable for both analog and digital transmission.
+
+Commonly connected using RJ-45 connectors.
+
+Wires are twisted to reduce electromagnetic interference.
+
+Two types: Unshielded (UTP) and Shielded (STP).
+
+Advantages: Low cost, easy to install, thin in size, supports high-speed LANs.
+
+2. Coaxial Cable
+
+Made of a copper core surrounded by insulation and a metal shield.
+
+Transmits signals in electrical form.
+
+Shield prevents interference and crosstalk.
+
+Covered with plastic for protection.
+
+Used in cable TV, internet, and some LANs.
+
+3. Fiber Optic Cable
+
+Transmits data as light pulses through glass or plastic fibers.
+
+Supports high bandwidth and long-distance communication.
+
+Immune to electromagnetic interference.
+
+Can be used underwater (submarine cables).
+
+Data transfer is unidirectional.
+
+4. Radio Waves
+
+Frequency range is 3 KHz to 300 GHz.
+
+Easy to generate and can travel long distances.
+
+Omni-directional and can pass through buildings.
+
+Used in indoor and outdoor communications.
+
+5. Microwaves
+
+Frequency range is 1 GHz to 300 GHz.
+
+Used for data, voice, and video communication.
+
+Works over short to medium distances.
+
+Unidirectional in nature.
+
+Cannot penetrate buildings effectively.
+
+6. Infrared Waves
+
+Frequency range is 300 GHz to 400 THz.
+
+Used for very short distance communication.
+
+Cannot pass through obstacles.
+
+Common in TV remotes, wireless mouse, keyboards, etc.
+
+7. Differences Between Radio, Microwave, and Infrared
+
+Radio waves are omni-directional, microwaves and infrared are unidirectional.
+
+Radio and microwaves can penetrate walls at low frequencies; infrared cannot penetrate at all.
+
+Radio wave frequency: 3 KHz to 1 GHz. Microwave: 1 GHz to 300 GHz. Infrared: 300 GHz to 400 THz.
+
+Radio has low security, microwave medium, and infrared high security.
+
+Some frequencies of radio and microwaves require licenses; infrared does not.
+
+Radio and microwaves are used for long-distance; infrared is for short distance.
+
+Radio is moderately priced, microwaves are expensive, infrared is cheap.
+
+8. Analog vs Digital Signals
+
+Analog signals are continuous; digital signals are discrete.
+
+Analog is represented by sine waves; digital by square waves.
+
+Analog used in natural sound and older devices; digital in computers and modern electronics.
+
+Analog has a continuous range of values; digital has discrete values.
+
+Digital is less noisy and more secure than analog.
