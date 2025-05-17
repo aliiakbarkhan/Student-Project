@@ -1,0 +1,109 @@
+Write an Echo_Client and Echo_server using TCP toestimate the round trip time from client to the server
+
+1.Echo Server
+
+import java.io.*;
+import java.net.*;
+class Server
+{
+public static void main(String args[])
+{
+int port=12345;
+try(ServerSocket serversocket=new
+ServerSocket(port,50,InetAddress.getByName("0.0.0.0")))
+{
+ System.out.println("[+] Server is listening port"+port);
+ while(true)
+ {
+ Socket clientSocket=serversocket.accept();
+ System.out.println("[+]New client connected :"+clientSocket.getInetAddress());
+ new ClientHandler(clientSocket).start();
+ }
+}
+catch(IOException e)
+{
+e.printStackTrace();
+}
+}
+}
+class ClientHandler extends Thread
+{
+private Socket socket;
+public ClientHandler(Socket socket)
+{
+this.socket=socket;
+}
+public void run()
+{
+try(
+InputStream in=socket.getInputStream();
+OutputStream out=socket.getOutputStream();
+BufferedReader reader=new BufferedReader(new InputStreamReader(in));
+PrintWriter writer=new PrintWriter(out,true);
+)
+{
+String message;
+while((message=reader.readLine())!=null)
+{
+System.out.println("[Received]"+message);
+writer.println(message);
+}
+}
+catch(IOException e)
+{
+e.printStackTrace();
+}
+finally
+{
+try{
+socket.close();
+System.out.println("[-]Client disconnected ");
+}
+catch(IOException e)
+{
+e.printStackTrace();
+}
+}
+}
+}
+
+2.Echo Client
+import java.io.*;
+import java.net.*;
+import java.time.Duration;
+import java.time.Instant;
+public class Client
+{
+public static void main(String args[])
+{
+String serverAddress="localhost";
+int port=12345;
+try(Socket socket=new Socket(serverAddress,port);
+PrintWriter writer=new PrintWriter(socket.getOutputStream(),true);
+BufferedReader reader=new BufferedReader(new
+InputStreamReader(socket.getInputStream()))
+)
+{
+ for(int i=0;i<5;i++)
+ {
+ String message="Ping"+i;
+ Instant startTime=Instant.now();
+ writer.println(message);
+ String response=reader.readLine();
+ Instant endTime=Instant.now();
+ long rtt=Duration.between(startTime,endTime).toMillis();
+ System.out.println("Receievd :"+response+"|RTT:"+rtt+"ms");
+ Thread.sleep(1000);
+ }
+ }
+ catch(IOException e)
+ {
+ e.printStackTrace();
+}
+catch(InterruptedException e)
+{
+Thread.currentThread().interrupt();
+System.out.println("Thread was Interrupted:"+e.getMessage());
+}
+}
+}
